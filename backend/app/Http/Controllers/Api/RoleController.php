@@ -12,11 +12,22 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $role = Role::get();
 
-        return response()->json([
-            'role' => $role
-        ]);
+        try {
+
+            $role = Role::get();
+
+            return response()->json([
+                'role' => $role
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada server'
+            ], 500);
+
+        }
     }
 
     public function store(RoleStoreRequest $request)
@@ -25,9 +36,7 @@ class RoleController extends Controller
         try {
 
             $role = Role::create([
-                'name' => $request['name'],
-                'is_active' => $request['is_active'],
-                'metadata' => $request['metadata']
+                'name' => $request['name']
             ]);
 
             if (!$role) {
@@ -39,7 +48,6 @@ class RoleController extends Controller
             return response()->json([
                 'message' => 'Role berhasil ditambahkan'
             ], 201);
-
         } catch (Throwable $e) {
 
             return response()->json([
@@ -58,32 +66,27 @@ class RoleController extends Controller
                 'message' => 'Role ditemukan',
                 'role' => $role
             ]);
-
         } catch (ModelNotFoundException $e) {
 
             return response()->json([
                 'message' => 'Role tidak ditemukan'
             ], 404);
-
         } catch (Throwable $e) {
 
             return response()->json([
                 'message' => 'Terjadi kesalahan dengan server'
             ], 500);
-
         }
     }
 
-    public function update(RoleStoreRequest $request)
+    public function update(RoleStoreRequest $request, $id)
     {
         try {
 
-            $role = Role::findOrFail($request['id']);
+            $role = Role::findOrFail($id);
 
             $updated = $role->update([
-                'name' => $request['name'],
-                'is_active' => $request['is_active'],
-                'metadata' => $request['metadata']
+                'name' => $request['name']
             ]);
 
             if (!$updated) {
@@ -95,7 +98,6 @@ class RoleController extends Controller
             return response()->json([
                 'message' => 'Role berhasil diupdate!'
             ], 200);
-
         } catch (ModelNotFoundException $e) {
 
             return response()->json([
@@ -107,11 +109,11 @@ class RoleController extends Controller
     public function destroy($id)
     {
         try {
-            
+
             $role = Role::findOrFail($id);
             $deleteRole = $role->delete();
 
-            if (!$deleteRole){
+            if (!$deleteRole) {
                 return response()->json([
                     'message' => 'Gagal menghapus data Role'
                 ], 500);
@@ -120,14 +122,11 @@ class RoleController extends Controller
             return response()->json([
                 'message' => 'Role berhasil dihapus!',
             ], 200);
-
-
         } catch (ModelNotFoundException $e) {
-            
+
             return response()->json([
                 'message' => 'Role tidak ditemukan'
             ], 404);
-
         } catch (Throwable $e) {
 
             return response()->json([
