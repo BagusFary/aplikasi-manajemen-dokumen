@@ -18,13 +18,9 @@ return new class extends Migration
             $table->json('metadata');
             $table->string('file_path');
             $table->boolean('is_active')->default(true);
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->foreign('category_id')->references('id')->on('categories')->nullOnDelete();
-            $table->unsignedBigInteger('department_id')->nullable();
-            $table->foreign('department_id')->references('id')->on('departments')->nullOnDelete();
-            
+            $table->foreignUuid('category_id')->nullable()->constrained('categories')->nullOnDelete();
+            $table->foreignUuid('department_ud')->nullable()->constrained('departments')->nullOnDelete();
             $table->foreignUuid('uploaded_by')->nullable()->constrained('users')->nullOnDelete();
-            
             $table->timestamps();
         });
     }
