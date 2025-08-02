@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->json('metadata');
-            $table->string('file_path');
+            $table->text('file_path');
             $table->boolean('is_active')->default(true);
             $table->foreignUuid('category_id')->nullable()->constrained('categories')->nullOnDelete();
-            $table->foreignUuid('department_ud')->nullable()->constrained('departments')->nullOnDelete();
+            $table->foreignUuid('department_id')->nullable()->constrained('departments')->nullOnDelete();
             $table->foreignUuid('uploaded_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });

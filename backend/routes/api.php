@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DepartmentController;
-use App\Models\Department;
+use App\Http\Controllers\Api\DocumentController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -37,5 +37,13 @@ Route::middleware('auth:sanctum')->group( function() {
         Route::put('/{id}', [DepartmentController::class, 'update']);
         Route::delete('/{id}', [DepartmentController::class, 'destroy']);
     });
-    
+
+    Route::prefix('document')->group(function() {
+        Route::get('/', [DocumentController::class, 'index']);
+        Route::get('/{id}', [DocumentController::class, 'show']);
+        Route::post('/', [DocumentController::class, 'store']);
+        Route::post('/{id}', [DocumentController::class, 'update']);
+        Route::delete('/{id}', [DocumentController::class, 'destroy']);
+    });
+
 });
